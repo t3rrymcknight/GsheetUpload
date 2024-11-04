@@ -1,0 +1,23 @@
+name: FTP Deploy
+
+on:
+  push:
+    branches:
+      - main  # Deploy from the main branch
+
+jobs:
+  ftp-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        with:
+          server: ${{ secrets.FTP_HOST }}  # FTP Host from GitHub Secrets
+          username: ${{ secrets.FTP_USERNAME }}  # FTP Username from GitHub Secrets
+          password: ${{ secrets.FTP_PASSWORD }}  # FTP Password from GitHub Secrets
+          local-dir: ./public  # Directory to deploy from GitHub repository
+          server-dir: /public_html  # Target directory on the FTP server
