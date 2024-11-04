@@ -11,13 +11,20 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3  # Updated to v3 for Node 16 and above
+        uses: actions/checkout@v3
+
+      # Add this build step if your project requires building
+      - name: Install Dependencies
+        run: npm install  # or yarn install, depending on your project
+
+      - name: Build Project
+        run: npm run build  # or the appropriate build command for your project
 
       - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.5  # Use the latest available version
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_HOST }}  # FTP Host from GitHub Secrets
-          username: ${{ secrets.FTP_USERNAME }}  # FTP Username from GitHub Secrets
-          password: ${{ secrets.FTP_PASSWORD }}  # FTP Password from GitHub Secrets
-          local-dir: ./public/  # Ensure this ends with a / to denote a directory
-          server-dir: /public_html/  # Target directory on the FTP server
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./public/  # Update this to the correct build output directory
+          server-dir: /public_html/
