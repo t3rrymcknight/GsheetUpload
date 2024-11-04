@@ -11,13 +11,13 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # Updated to v3 for Node 16 and above
 
       - name: FTP Deploy
-        uses: SamKirkland/FTP-Deploy-Action@4.3.0
+        uses: SamKirkland/FTP-Deploy-Action@4.4.0  # Update to a newer version if available
         with:
           server: ${{ secrets.FTP_HOST }}  # FTP Host from GitHub Secrets
           username: ${{ secrets.FTP_USERNAME }}  # FTP Username from GitHub Secrets
           password: ${{ secrets.FTP_PASSWORD }}  # FTP Password from GitHub Secrets
-          local-dir: ./public  # Directory to deploy from GitHub repository
-          server-dir: /public_html  # Target directory on the FTP server
+          local-dir: ./public/  # Ensure this ends with a / to denote a directory
+          server-dir: /public_html/  # Target directory on the FTP server
