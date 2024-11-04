@@ -3,7 +3,7 @@ name: 🚀 FTP Deploy
 on:
   push:
     branches:
-      - main  # Deploy when pushing to the main branch
+      - main
 
 jobs:
   web-deploy:
@@ -11,21 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
-      uses: actions/checkout@v4  # Updated to v4
+      uses: actions/checkout@v4
 
     - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@v4.3.5  # Updated to latest version
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.5
       with:
-        server: ${{ secrets.FTP_SERVER }}
+        server: 77.37.34.193
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
         server-dir: /public_html/
-        dangerous-clean-slate: true  # Use with caution, this will delete files on the server if they don't exist in the repo
+        protocol: ftp
+        port: 21
+        timeout: 60000
+        dangerous-clean-slate: true
         exclude: |
           **/.git*
           **/.git*/**
           **/node_modules/**
-          fileToExclude.txt
 
     - name: 🎉 Deployment Status
       run: echo "Deployment completed successfully!"
+
+    - name: 📝 Log Error on Failure
+      if: failure()
+      run: |
+        echo "Deployment failed. Here are the last few lines of the job log:"
+        tail -n 50 $GITHUB_WORKSPACE/github-ftp-deploy.log
